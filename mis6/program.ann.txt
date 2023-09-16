@@ -1,0 +1,63 @@
+/*
+  Program entry point
+*/
+
+~Main_Begin
+
+	AB<~HelloWorldConstant AB>: #~PrintLn // PrintLn(helloWorldConstant)
+	
+	~Hang
+	
+		@~Hang
+	
+~Main_End
+
+
+/*
+	PrintLn
+	
+    Prints a ^ terminated string to the console and starts a new line after this
+	
+    PrintLn(string $s)
+    {
+		XY = $s;
+	    while ([XY] != '^')
+	    {
+			Console = [XY];
+			[XY]++;
+		}
+		Console = '$';
+	}
+*/
+
+~PrintLn
+
+	~PrintLn_Setup
+	
+		AB>: // Save registers
+		
+		XY<$0[ XY-'4 XY<*0X // XY = [SP - 4]
+
+	~PrintLnBeginLoop
+	
+		A<&0X // A = [XY]
+		B<$0A B-'^ =~PrintLnEndLoop // if (A = '^') Goto ~PrintLnEndLoop
+		A>$05 // Console = A
+		XY+'1 // XY = XY + 1
+		@~PrintLnBeginLoop // Goto ~PrintLnBeginLoop
+		
+	~PrintLnEndLoop
+	
+		A<'$ A>$05 // Console = '$' (new line)
+		AB<: // Restore any registers that were used from stack
+		XY<: // Pop ret address
+		00<: // Pop parametr from stack to Discard
+		@$0X // Go back to the caller
+
+	// 35:
+
+~Constants
+
+	~HelloWorldConstant
+	
+		HELLO WORLD^

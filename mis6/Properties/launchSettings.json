@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "mis6": {
+      "commandName": "Project",
+      "commandLineArgs": "program.ann.txt"
+    }
+  }
+}
